@@ -21,6 +21,8 @@ const makeDomo = (req, res) => {
   const domoData = {
     name: req.body.name,
     age: req.body.age,
+    sugar: req.body.sugar,
+    fat: req.body.fat,
     owner: req.session.account._id,
   };
 

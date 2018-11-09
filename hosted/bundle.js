@@ -24,15 +24,27 @@ var DomoForm = function DomoForm(props) {
         React.createElement(
             'label',
             { htmlFor: 'name' },
-            'Name: '
+            'Date: '
         ),
-        React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'Domo Name' }),
+        React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'Date of meal' }),
         React.createElement(
             'label',
             { htmlFor: 'age' },
-            'Age: '
+            'Calories: '
         ),
-        React.createElement('input', { id: 'domoAge', type: 'text', name: 'age', placeholder: 'Domo Age' }),
+        React.createElement('input', { id: 'domoAge', type: 'text', name: 'age', placeholder: 'Calorie Count' }),
+        React.createElement(
+            'label',
+            { htmlFor: 'sugar' },
+            'Grams of Sugar: '
+        ),
+        React.createElement('input', { id: 'sugarCount', type: 'text', name: 'sugar', placeholder: 'amount of sugar' }),
+        React.createElement(
+            'label',
+            { htmlFor: 'fat' },
+            'Grams of Fat: '
+        ),
+        React.createElement('input', { id: 'fatCount', type: 'text', name: 'fat', placeholder: 'amount of fat' }),
         React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
         React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
     );
@@ -59,15 +71,29 @@ var DomoList = function DomoList(props) {
             React.createElement(
                 'h3',
                 { className: 'domoName' },
-                ' Name: ',
+                ' Date: ',
                 domo.name,
                 ' '
             ),
             React.createElement(
                 'h3',
                 { className: 'domoAge' },
-                ' Age: ',
+                ' Claroies: ',
                 domo.age,
+                ' '
+            ),
+            React.createElement(
+                'h3',
+                { className: 'sugar' },
+                ' Sugar: ',
+                domo.sugar,
+                ' '
+            ),
+            React.createElement(
+                'h3',
+                { className: 'fat' },
+                ' Fat: ',
+                domo.fat,
                 ' '
             )
         );
