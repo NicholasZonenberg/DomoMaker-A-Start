@@ -15,20 +15,36 @@ const handleDomo = (e) => {
     return false;
 };
 
+var premium = false;
+
 const DomoForm = (props) => {
+    function togglePremium(e){
+        console.log("toggeling premium");
+        sendAjax('GET', '/premium', null, (data) => {
+            premium=data.premium;
+        })
+        if(premium){
+            document.getElementById("sugarCount").disabled = true;
+            document.getElementById("fatCount").disabled = true;
+        }
+        else {
+            document.getElementById("sugarCount").disabled = false;
+            document.getElementById("fatCount").disabled = false;
+        }
+    }
+    
     return (
-        <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="/maker" method="POST" className="domoForm">
-            <label htmlFor="name">Date: </label>
-            <input id="domoName" type="text" name="name" placeholder="Date of meal"/>
-            <label htmlFor="age">Calories: </label>
-            <input id="domoAge" type="text" name="age" placeholder="Calorie Count"/>
-            <label htmlFor="sugar">Grams of Sugar: </label>
-            <input id="sugarCount" type="text" name="sugar" placeholder="amount of sugar"/>
-            <label htmlFor="fat">Grams of Fat: </label>
-            <input id="fatCount" type="text" name="fat" placeholder="amount of fat"/>
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
-        </form>
+        <div>
+            <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="/maker" method="POST" className="domoForm">
+                <input id="domoName" type="date" name="name" placeholder="Date of meal"/>
+                <input id="domoAge" type="number" name="age" placeholder="Calorie Count"/>
+                <input id="sugarCount" type="number" name="sugar" placeholder="amount of sugar" />
+                <input id="fatCount" type="number" name="fat" placeholder="amount of fat" />
+                <input type="hidden" name="_csrf" value={props.csrf} />
+                <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            </form>
+            <button id="enablePremium" onClick={togglePremium}>Get Premium</button>
+        </div>
     );
 };
 
@@ -44,7 +60,7 @@ const DomoList = function(props) {
     const domoNodes = props.domos.map(function(domo) {
         return(
             <div key={domo._id} className="domo">
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+                <img src="/assets/img/meal.jpg" alt="domo face" className="domoFace" />
                 <h3 className="domoName"> Date: {domo.name} </h3>
                 <h3 className="domoAge"> Claroies: {domo.age} </h3>
                 <h3 className="sugar"> Sugar: {domo.sugar} </h3>
@@ -62,23 +78,34 @@ const DomoList = function(props) {
 
 const loadDomosFromServer = () => {
     sendAjax('GET', '/getDomos', null, (data) => {
+        console.log
         ReactDOM.render(
             <DomoList domos={data.domos} />, document.querySelector("#domos")
         );
+        if(!premium){
+            document.getElementById("sugarCount").disabled = true;
+            document.getElementById("fatCount").disabled = true;
+        }
+        else {
+            document.getElementById("sugarCount").disabled = false;
+            document.getElementById("fatCount").disabled = false;
+        }
     });
 };
 
 const setup = function(csrf) {
     console.log("Setting up Domos");
-    ReactDOM.render(
-        <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
-    );
+    if(document.querySelector("#makeDomo")){
+        ReactDOM.render(
+            <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
+        );
 
-    ReactDOM.render(
-        <DomoList domos={[]} />, document.querySelector("#domos")
-    );
+        ReactDOM.render(
+            <DomoList domos={[]} />, document.querySelector("#domos")
+        );
 
-    loadDomosFromServer();
+        loadDomosFromServer();
+    }
 };
 
 const getToken = () => {
@@ -90,4 +117,7 @@ const getToken = () => {
 $(document).ready(function() {
     console.log("Setting up Domos");
     getToken();
+    sendAjax('GET', '/getPremium', null, (data) => {
+        premium=data.premium;
+    })
 });

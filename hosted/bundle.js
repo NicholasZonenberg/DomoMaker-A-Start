@@ -1,3 +1,99 @@
+"use strict";
+
+var DayTitle = function DayTitle(props) {
+    return React.createElement(
+        "h1",
+        { id: "daysTitle" },
+        " Total Per Day "
+    );
+};
+
+var DayList = function DayList(props) {
+    console.log(props);
+    if (props.dates.length === 0) {
+        return React.createElement(
+            "div",
+            { className: "domoList" },
+            React.createElement(
+                "h3",
+                { className: "emptyDomo" },
+                "No Dates Yet"
+            )
+        );
+    }
+
+    var domoNodes = props.dates.map(function (dates) {
+        console.log(dates);
+        return React.createElement(
+            "div",
+            { key: dates._id, className: "domo" },
+            React.createElement("img", { src: "/assets/img/date.png", alt: "domo face", className: "domoFace" }),
+            React.createElement(
+                "h3",
+                { className: "domoName" },
+                " Date: ",
+                dates.name,
+                " "
+            ),
+            React.createElement(
+                "h3",
+                { className: "domoAge" },
+                " Claroies Total: ",
+                dates.calories,
+                " "
+            ),
+            React.createElement(
+                "h3",
+                { className: "sugar" },
+                " Sugar Total: ",
+                dates.sugar,
+                " "
+            ),
+            React.createElement(
+                "h3",
+                { className: "fat" },
+                " Fat Total: ",
+                dates.fat,
+                " "
+            )
+        );
+    });
+
+    return React.createElement(
+        "div",
+        { className: "domoList" },
+        domoNodes
+    );
+};
+
+var loadDaysFromServer = function loadDaysFromServer() {
+    sendAjax('GET', '/getDays', null, function (data) {
+        console.log(data);
+        ReactDOM.render(React.createElement(DayList, { dates: data.dates }), document.querySelector("#daysList"));
+    });
+};
+
+var daySetup = function daySetup(csrf) {
+    console.log("Setting up Domos");
+    if (document.querySelector("#dayTitle")) {
+        ReactDOM.render(React.createElement(DayTitle, null), document.querySelector("#dayTitle"));
+
+        ReactDOM.render(React.createElement(DayList, { dates: [] }), document.querySelector("#daysList"));
+
+        loadDaysFromServer();
+    }
+};
+
+var getDayToken = function getDayToken() {
+    sendAjax('GET', '/getToken', null, function (result) {
+        daySetup(result.csrfToken);
+    });
+};
+
+$(document).ready(function () {
+    console.log("Setting up dates");
+    getDayToken();
+});
 'use strict';
 
 var handleDomo = function handleDomo(e) {
@@ -17,36 +113,41 @@ var handleDomo = function handleDomo(e) {
     return false;
 };
 
+var premium = false;
+
 var DomoForm = function DomoForm(props) {
+    function togglePremium(e) {
+        console.log("toggeling premium");
+        sendAjax('GET', '/premium', null, function (data) {
+            premium = data.premium;
+        });
+        if (premium) {
+            document.getElementById("sugarCount").disabled = true;
+            document.getElementById("fatCount").disabled = true;
+        } else {
+            document.getElementById("sugarCount").disabled = false;
+            document.getElementById("fatCount").disabled = false;
+        }
+    }
+
     return React.createElement(
-        'form',
-        { id: 'domoForm', onSubmit: handleDomo, name: 'domoForm', action: '/maker', method: 'POST', className: 'domoForm' },
+        'div',
+        null,
         React.createElement(
-            'label',
-            { htmlFor: 'name' },
-            'Date: '
+            'form',
+            { id: 'domoForm', onSubmit: handleDomo, name: 'domoForm', action: '/maker', method: 'POST', className: 'domoForm' },
+            React.createElement('input', { id: 'domoName', type: 'date', name: 'name', placeholder: 'Date of meal' }),
+            React.createElement('input', { id: 'domoAge', type: 'number', name: 'age', placeholder: 'Calorie Count' }),
+            React.createElement('input', { id: 'sugarCount', type: 'number', name: 'sugar', placeholder: 'amount of sugar' }),
+            React.createElement('input', { id: 'fatCount', type: 'number', name: 'fat', placeholder: 'amount of fat' }),
+            React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+            React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
         ),
-        React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'Date of meal' }),
         React.createElement(
-            'label',
-            { htmlFor: 'age' },
-            'Calories: '
-        ),
-        React.createElement('input', { id: 'domoAge', type: 'text', name: 'age', placeholder: 'Calorie Count' }),
-        React.createElement(
-            'label',
-            { htmlFor: 'sugar' },
-            'Grams of Sugar: '
-        ),
-        React.createElement('input', { id: 'sugarCount', type: 'text', name: 'sugar', placeholder: 'amount of sugar' }),
-        React.createElement(
-            'label',
-            { htmlFor: 'fat' },
-            'Grams of Fat: '
-        ),
-        React.createElement('input', { id: 'fatCount', type: 'text', name: 'fat', placeholder: 'amount of fat' }),
-        React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-        React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
+            'button',
+            { id: 'enablePremium', onClick: togglePremium },
+            'Get Premium'
+        )
     );
 };
 
@@ -67,7 +168,7 @@ var DomoList = function DomoList(props) {
         return React.createElement(
             'div',
             { key: domo._id, className: 'domo' },
-            React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domo face', className: 'domoFace' }),
+            React.createElement('img', { src: '/assets/img/meal.jpg', alt: 'domo face', className: 'domoFace' }),
             React.createElement(
                 'h3',
                 { className: 'domoName' },
@@ -108,17 +209,27 @@ var DomoList = function DomoList(props) {
 
 var loadDomosFromServer = function loadDomosFromServer() {
     sendAjax('GET', '/getDomos', null, function (data) {
+        console.log;
         ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
+        if (!premium) {
+            document.getElementById("sugarCount").disabled = true;
+            document.getElementById("fatCount").disabled = true;
+        } else {
+            document.getElementById("sugarCount").disabled = false;
+            document.getElementById("fatCount").disabled = false;
+        }
     });
 };
 
 var setup = function setup(csrf) {
     console.log("Setting up Domos");
-    ReactDOM.render(React.createElement(DomoForm, { csrf: csrf }), document.querySelector("#makeDomo"));
+    if (document.querySelector("#makeDomo")) {
+        ReactDOM.render(React.createElement(DomoForm, { csrf: csrf }), document.querySelector("#makeDomo"));
 
-    ReactDOM.render(React.createElement(DomoList, { domos: [] }), document.querySelector("#domos"));
+        ReactDOM.render(React.createElement(DomoList, { domos: [] }), document.querySelector("#domos"));
 
-    loadDomosFromServer();
+        loadDomosFromServer();
+    }
 };
 
 var getToken = function getToken() {
@@ -130,6 +241,9 @@ var getToken = function getToken() {
 $(document).ready(function () {
     console.log("Setting up Domos");
     getToken();
+    sendAjax('GET', '/getPremium', null, function (data) {
+        premium = data.premium;
+    });
 });
 "use strict";
 
