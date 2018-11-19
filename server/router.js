@@ -14,6 +14,7 @@ const router = (app) => {
   app.get('/premium', mid.requiresLogin, controllers.Domo.premium);
   app.get('/getPremium', mid.requiresLogin, controllers.Domo.getPremium);
   app.get('/days', mid.requiresLogin, controllers.Domo.daysPage);
+  app.get('/graphs', mid.requiresLogin, controllers.Domo.graphMaker);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

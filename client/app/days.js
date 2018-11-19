@@ -21,8 +21,8 @@ const DayList = function(props) {
                 <img src="/assets/img/date.png" alt="domo face" className="domoFace" />
                 <h3 className="domoName"> Date: {dates.name} </h3>
                 <h3 className="domoAge"> Claroies Total: {dates.calories} </h3>
-                <h3 className="sugar"> Sugar Total: {dates.sugar} </h3>
-                <h3 className="fat"> Fat Total: {dates.fat} </h3>
+                <h3 className="domoAge"> Sugar Total: {dates.sugar} </h3>
+                <h3 className="domoAge"> Fat Total: {dates.fat} </h3>
             </div>
         );
     });

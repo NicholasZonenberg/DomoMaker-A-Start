@@ -1,8 +1,8 @@
 const models = require('../models');
 const _ = require('lodash');
-const moment = require('moment');
+const Moment = require('moment');
 
-var premium = true;
+let premium = true;
 
 const Domo = models.Domo;
 
@@ -14,6 +14,17 @@ const daysPage = (req, res) => {
     }
 
     return res.render('days', { csrfToken: req.csrfToken(), domos: docs });
+  });
+};
+
+const graphsPage = (req, res) => {
+  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+
+    return res.render('graphs', { csrfToken: req.csrfToken(), domos: docs });
   });
 };
 
@@ -68,38 +79,38 @@ const getDomos = (request, response) => {
   return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
-      return res.status(400).json({error:"An error occurred"});
+      return res.status(400).json({ error: 'An error occurred' });
     }
-    return res.json({domos: docs});
-  })
-} 
+    return res.json({ domos: docs });
+  });
+};
 
 const getDays = (request, response) => {
   const req = request;
   const res = response;
 
   return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
-    if ( err) {
+    if (err) {
       console.log(err);
-      return res.status(400).json({error:"An error occurred"});
+      return res.status(400).json({ error: 'An error occurred' });
     }
     console.log(premium);
-    var dates=[];
-    for(var x = 0; x < docs.length; x++){
-      var alreadyIn = false;
-      var entry = {
-        name: "",
+    let dates = [];
+    for (let x = 0; x < docs.length; x++) {
+      let alreadyIn = false;
+      const entry = {
+        name: '',
         calories: 0,
         sugar: 0,
         fat: 0,
       };
-      for(var y = 0; y < dates.length; y++){
-        if(docs[x].name === dates[y].name){
+      for (let y = 0; y < dates.length; y++) {
+        if (docs[x].name === dates[y].name) {
           alreadyIn = true;
           break;
         }
       }
-      if (!alreadyIn){
+      if (!alreadyIn) {
         entry.name = docs[x].name;
         entry.calories = 0;
         entry.sugar = 0;
@@ -107,43 +118,40 @@ const getDays = (request, response) => {
         dates.push(entry);
       }
     }
-    dates = _.orderBy(dates,function(o){
-      return new moment(o.name);
-    });
-    for(var x = 0; x < docs.length; x++){
-      for(var y = 0; y < dates.length; y++){
-        if(dates[y].name === docs[x].name){
-          if(docs[x].age){
-            dates[y].calories += docs[x].age;
+    dates = _.orderBy(dates, (o) => new Moment(o.name));
+    for (let a = 0; a < docs.length; a++) {
+      for (let b = 0; b < dates.length; b++) {
+        if (dates[b].name === docs[a].name) {
+          if (docs[a].age) {
+            dates[b].calories += docs[a].age;
           }
-          if(docs[x].sugar && premium){
-            dates[y].sugar += docs[x].sugar;
+          if (docs[a].sugar && premium) {
+            dates[b].sugar += docs[a].sugar;
           }
-          if(docs[x].fat && premium){
-            dates[y].fat += docs[x].fat;
+          if (docs[a].fat && premium) {
+            dates[b].fat += docs[a].fat;
           }
         }
       }
     }
-    return res.json({dates: dates});
-  })
-}
+    return res.json({ dates });
+  });
+};
 
 const setPremium = (request, response) => {
-  console.log("b: " + premium);
+  console.log(`b: ${premium}`);
   premium = !premium;
-  console.log("a: " + premium);
-  return response.json({premium: premium});
-}
+  console.log(`a: ${premium}`);
+  return response.json({ premium });
+};
 
-const getPremium = (request, response) => {
-  return response.json({premium: premium});
-}
+const getPremium = (request, response) => response.json({ premium });
 
 module.exports.makerPage = makerPage;
 module.exports.daysPage = daysPage;
+module.exports.graphMaker = graphsPage;
 module.exports.getDomos = getDomos;
 module.exports.getDays = getDays;
 module.exports.make = makeDomo;
 module.exports.premium = setPremium;
-module.exports.getPremium = getPremium
+module.exports.getPremium = getPremium;

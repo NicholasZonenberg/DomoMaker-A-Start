@@ -238,19 +238,20 @@ h3.emptyDomo {
 
 h3.domoName {
     float:left;
-    width: 200px;
+    width: 100px;
     font-weight: bold;
     padding-left: 65px;
-    font-size: 1.5em;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
 }
 
 h3.domoAge {
     float:right;
     text-align: left;
-    width: 100px;
+    width: 200px;
     font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
 }
 
 .domo:first-child {
@@ -259,4 +260,25 @@ h3.domoAge {
 
 .domo:last-child {
     margin-bottom:10px;
+}
+
+#graphSec{
+    margin:auto;
+    width:750px;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: lightgray;
+}
+
+#daysTitle{
+    width:250px;
+    margin:auto;
+    background-color: lightblue;
+    height: 45px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-family: 'Carter One', cursive;
 }

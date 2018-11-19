@@ -63,8 +63,8 @@ const DomoList = function(props) {
                 <img src="/assets/img/meal.jpg" alt="domo face" className="domoFace" />
                 <h3 className="domoName"> Date: {domo.name} </h3>
                 <h3 className="domoAge"> Claroies: {domo.age} </h3>
-                <h3 className="sugar"> Sugar: {domo.sugar} </h3>
-                <h3 className="fat"> Fat: {domo.fat} </h3>
+                <h3 className="domoAge"> Sugar: {domo.sugar} </h3>
+                <h3 className="domoAge"> Fat: {domo.fat} </h3>
             </div>
         );
     });

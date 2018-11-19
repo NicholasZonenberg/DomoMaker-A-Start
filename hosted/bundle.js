@@ -44,14 +44,14 @@ var DayList = function DayList(props) {
             ),
             React.createElement(
                 "h3",
-                { className: "sugar" },
+                { className: "domoAge" },
                 " Sugar Total: ",
                 dates.sugar,
                 " "
             ),
             React.createElement(
                 "h3",
-                { className: "fat" },
+                { className: "domoAge" },
                 " Fat Total: ",
                 dates.fat,
                 " "
@@ -93,6 +93,133 @@ var getDayToken = function getDayToken() {
 $(document).ready(function () {
     console.log("Setting up dates");
     getDayToken();
+});
+'use strict';
+
+var GraphTitle = function GraphTitle() {
+    return React.createElement(
+        'h1',
+        { id: 'daysTitle' },
+        ' Graphs '
+    );
+};
+
+var Graph = function Graph() {
+    console.log('making graphs');
+
+    console.log(dates);
+    var calData = {
+        x: [],
+        y: [],
+        name: 'Calories'
+    };
+
+    var fatData = {
+        x: [],
+        y: [],
+        name: 'Grams of Fat'
+    };
+
+    var sugarData = {
+        x: [],
+        y: [],
+        name: 'Grams of Sugar'
+    };
+
+    for (var x = 0; x < dates.length; x++) {
+        sugarData.x.push(dates[x].name);
+        calData.x.push(dates[x].name);
+        fatData.x.push(dates[x].name);
+
+        calData.y.push(dates[x].calories);
+        sugarData.y.push(dates[x].sugar);
+        fatData.y.push(dates[x].fat);
+    }
+
+    return React.createElement(
+        'div',
+        null,
+        React.createElement(Plot, { data: calData, layout: { width: 750, height: 300, title: 'Daily Calorie Graph' } }),
+        React.createElement(Plot, { data: fatData, layout: { width: 750, height: 300, title: 'Daily Fat Graph' } }),
+        React.createElement(Plot, { data: sugarData, layout: { width: 750, height: 300, title: 'Daily Sugar Graph' } })
+    );
+};
+
+var dates;
+
+var loadGraphFromServer = function loadGraphFromServer() {
+    console.log('getting graph data');
+    sendAjax('GET', '/getDays', null, function (data) {
+        console.log('got graph data');
+        console.log(data.dates);
+        dates = data.dates;
+        console.log('making graphs');
+
+        console.log(dates);
+        var calData = {
+            x: [],
+            y: [],
+            name: 'Calories',
+            type: 'bar'
+        };
+
+        var fatData = {
+            x: [],
+            y: [],
+            name: 'Grams of Fat',
+            type: 'bar'
+        };
+
+        var sugarData = {
+            x: [],
+            y: [],
+            name: 'Grams of Sugar',
+            type: 'bar'
+        };
+
+        var calLay = { width: 750, height: 300, title: 'Daily Calorie Graph' };
+        var fatLay = { width: 750, height: 300, title: 'Daily Fat Graph' };
+        var sugarLay = { width: 750, height: 300, title: 'Daily Sugar Graph' };
+
+        for (var x = 0; x < dates.length; x++) {
+            sugarData.x.push(dates[x].name);
+            calData.x.push(dates[x].name);
+            fatData.x.push(dates[x].name);
+
+            calData.y.push(dates[x].calories);
+            sugarData.y.push(dates[x].sugar);
+            fatData.y.push(dates[x].fat);
+        }
+
+        console.log(calData);
+
+        Plotly.plot('calPlot', [calData], calLay);
+        Plotly.plot('sugarPlot', [sugarData], sugarLay);
+        Plotly.plot('fatPlot', [fatData], fatLay);
+    });
+};
+
+var GraphSetup = function GraphSetup(csrf) {
+    console.log('loading graph data');
+
+    if (document.querySelector("#graphTitle")) {
+        ReactDOM.render(React.createElement(GraphTitle, null), document.querySelector("#graphTitle"));
+
+        loadGraphFromServer();
+    }
+};
+
+var premium;
+
+var getGraphToken = function getGraphToken() {
+    sendAjax('GET', '/getToken', null, function (result) {
+        GraphSetup(result.csrfToken);
+    });
+};
+
+$(document).ready(function () {
+    console.log("Setting up dates");
+    getGraphToken();
 });
 'use strict';
 
@@ -185,14 +312,14 @@ var DomoList = function DomoList(props) {
             ),
             React.createElement(
                 'h3',
-                { className: 'sugar' },
+                { className: 'domoAge' },
                 ' Sugar: ',
                 domo.sugar,
                 ' '
             ),
             React.createElement(
                 'h3',
-                { className: 'fat' },
+                { className: 'domoAge' },
                 ' Fat: ',
                 domo.fat,
                 ' '
