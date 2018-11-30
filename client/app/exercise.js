@@ -17,7 +17,7 @@ const handleDomo = (e) => {
 
 var premium = false;
 
-const DomoForm = (props) => {
+const ExForm = (props) => {
     function togglePremium(e){
         console.log("toggeling premium");
         sendAjax('GET', '/premium', null, (data) => {
@@ -37,11 +37,16 @@ const DomoForm = (props) => {
         <div>
             <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="/maker" method="POST" className="domoForm">
                 <input id="domoName" type="date" name="name" placeholder="Date of meal"/>
-                <input id="domoAge" type="number" name="age" placeholder="Calorie Count"/>
-                <input id="sugarCount" type="number" name="sugar" placeholder="amount of sugar" />
-                <input id="fatCount" type="number" name="fat" placeholder="amount of fat" />
-                <input type="hidden" name="exerciseType" value="" />
-                <input type="hidden" name="exerciseTime" value="0" />
+                <input id="domoAge" type="hidden" name="age" placeholder="Calorie Count"/>
+                <input id="sugarCount" type="hidden" name="sugar" placeholder="amount of sugar" />
+                <input id="fatCount" type="hidden" name="fat" placeholder="amount of fat" />
+                <select id="exerciseType" name="exerciseType" size="1" >
+                    <option value="running">Running</option>
+                    <option value="walking">Walking</option>
+                    <option value="biking">Biking</option>
+                    <option value="swiming">Swimming</option>
+                </select>
+                <input id="exerciseTime" type="number" name="exerciseTime" placeholder="Exercise Duration" />
                 <input type="hidden" name="_csrf" value={props.csrf} />
                 <input className="makeDomoSubmit" type="submit" value="Make Domo" />
             </form>
@@ -50,7 +55,7 @@ const DomoForm = (props) => {
     );
 };
 
-const DomoList = function(props) {
+const ExList = function(props) {
     if(props.domos.length === 0) {
         return(
             <div className="domoList">
@@ -95,30 +100,30 @@ const loadDomosFromServer = () => {
     });
 };
 
-const setup = function(csrf) {
-    console.log("Setting up Domos");
-    if(document.querySelector("#makeDomo")){
+const exSetup = function(csrf) {
+    console.log("Setting up Exercise2");
+    if(document.querySelector("#enterEx")){
         ReactDOM.render(
-            <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
+            <ExForm csrf={csrf} />, document.querySelector("#enterEx")
         );
 
         ReactDOM.render(
-            <DomoList domos={[]} />, document.querySelector("#domos")
+            <ExList domos={[]} />, document.querySelector("#exercise")
         );
 
-        loadDomosFromServer();
+        //loadDomosFromServer();
     }
 };
 
-const getToken = () => {
+const exGetToken = () => {
     sendAjax('GET', '/getToken', null, (result) => {
-        setup(result.csrfToken);
+        exSetup(result.csrfToken);
     });
 };
 
 $(document).ready(function() {
-    console.log("Setting up Domos");
-    getToken();
+    console.log("Setting up Exercise");
+    exGetToken();
     sendAjax('GET', '/getPremium', null, (data) => {
         premium=data.premium;
     })

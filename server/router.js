@@ -11,6 +11,9 @@ const router = (app) => {
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
   app.post('/maker', mid.requiresLogin, controllers.Domo.make);
+  app.get('/prem', mid.requiresLogin, controllers.Domo.prem);
+  app.get('/exercise', mid.requiresLogin, controllers.Domo.exercise);
+  app.get('/exGraph', mid.requiresLogin, controllers.Domo.exGraph);
   app.get('/premium', mid.requiresLogin, controllers.Domo.premium);
   app.get('/getPremium', mid.requiresLogin, controllers.Domo.getPremium);
   app.get('/days', mid.requiresLogin, controllers.Domo.daysPage);
