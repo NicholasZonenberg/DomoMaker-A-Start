@@ -27,7 +27,7 @@ var DayList = function DayList(props) {
         return React.createElement(
             "div",
             { key: dates._id, className: "domo" },
-            React.createElement("img", { src: "/assets/img/date.png", alt: "domo face", className: "domoFace" }),
+            React.createElement("img", { src: "/assets/img/date.png", alt: "date", className: "domoFace" }),
             React.createElement(
                 "h3",
                 { className: "domoName" },
@@ -37,21 +37,21 @@ var DayList = function DayList(props) {
             ),
             React.createElement(
                 "h3",
-                { className: "domoAge" },
-                " Claroies Total: ",
+                { className: "dateCal" },
+                " Calories Total: ",
                 dates.calories,
                 " "
             ),
             React.createElement(
                 "h3",
-                { className: "domoAge" },
+                { className: "dateSugar " + dates.name + "s" },
                 " Sugar Total: ",
                 dates.sugar,
                 " "
             ),
             React.createElement(
                 "h3",
-                { className: "domoAge" },
+                { className: "sateFat " + dates.name + "f" },
                 " Fat Total: ",
                 dates.fat,
                 " "
@@ -70,6 +70,22 @@ var loadDaysFromServer = function loadDaysFromServer() {
     sendAjax('GET', '/getDays', null, function (data) {
         console.log(data);
         ReactDOM.render(React.createElement(DayList, { dates: data.dates }), document.querySelector("#daysList"));
+        for (var x = 0; x < data.dates.length; x++) {
+            if (!data.dates[x].fat) {
+                var temp = document.getElementsByClassName(data.dates[x].name + 'f');
+                console.log(temp);
+                for (var y = 0; y < temp.length; y++) {
+                    temp[y].innerHTML = '';
+                }
+            }
+            if (!data.dates[x].sugar) {
+                var temp = document.getElementsByClassName(data.dates[x].name + 's');
+                console.log(temp);
+                for (var y = 0; y < temp.length; y++) {
+                    temp[y].innerHTML = '';
+                }
+            }
+        }
     });
 };
 
@@ -229,7 +245,7 @@ var handleDomo = function handleDomo(e) {
     $("#domoMessage").animate({ width: 'hide' }, 350);
 
     if ($('#domoName').val() == '' || $("#domoAge").val() == '') {
-        handleError("RAWR! All fields are required");
+        handleError("All fields are required");
         return false;
     }
 
@@ -268,7 +284,7 @@ var DomoForm = function DomoForm(props) {
             React.createElement('input', { id: 'sugarCount', type: 'number', name: 'sugar', placeholder: 'amount of sugar' }),
             React.createElement('input', { id: 'fatCount', type: 'number', name: 'fat', placeholder: 'amount of fat' }),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-            React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
+            React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Enter Meal' })
         ),
         React.createElement(
             'button',
@@ -286,7 +302,7 @@ var DomoList = function DomoList(props) {
             React.createElement(
                 'h3',
                 { className: 'emptyDomo' },
-                'No Domos Yet'
+                'No Meals Yet'
             )
         );
     }
@@ -306,20 +322,20 @@ var DomoList = function DomoList(props) {
             React.createElement(
                 'h3',
                 { className: 'domoAge' },
-                ' Claroies: ',
+                ' Calories: ',
                 domo.age,
                 ' '
             ),
             React.createElement(
                 'h3',
-                { className: 'domoAge' },
+                { className: 'sugar ' + domo._id + 's' },
                 ' Sugar: ',
                 domo.sugar,
                 ' '
             ),
             React.createElement(
                 'h3',
-                { className: 'domoAge' },
+                { className: 'fat ' + domo._id + 'f' },
                 ' Fat: ',
                 domo.fat,
                 ' '
@@ -344,6 +360,21 @@ var loadDomosFromServer = function loadDomosFromServer() {
         } else {
             document.getElementById("sugarCount").disabled = false;
             document.getElementById("fatCount").disabled = false;
+        }
+        console.log(data.domos);
+        for (var x = 0; x < data.domos.length; x++) {
+            if (!data.domos[x].fat) {
+                var temp = document.getElementsByClassName(data.domos[x]._id.toString() + 'f');
+                for (var y = 0; y < temp.length; y++) {
+                    temp[y].innerHTML = '';
+                }
+            }
+            if (!data.domos[x].sugar) {
+                var temp = document.getElementsByClassName(data.domos[x]._id.toString() + 's');
+                for (var y = 0; y < temp.length; y++) {
+                    temp[y].innerHTML = '';
+                }
+            }
         }
     });
 };

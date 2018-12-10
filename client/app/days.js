@@ -18,11 +18,11 @@ const DayList = function(props) {
         console.log(dates);
         return(
             <div key={dates._id} className="domo">
-                <img src="/assets/img/date.png" alt="domo face" className="domoFace" />
+                <img src="/assets/img/date.png" alt="date" className="domoFace" />
                 <h3 className="domoName"> Date: {dates.name} </h3>
-                <h3 className="domoAge"> Claroies Total: {dates.calories} </h3>
-                <h3 className="domoAge"> Sugar Total: {dates.sugar} </h3>
-                <h3 className="domoAge"> Fat Total: {dates.fat} </h3>
+                <h3 className="dateCal"> Calories Total: {dates.calories} </h3>
+                <h3 className={`dateSugar ${dates.name}s`}> Sugar Total: {dates.sugar} </h3>
+                <h3 className={`sateFat ${dates.name}f`}> Fat Total: {dates.fat} </h3>
             </div>
         );
     });
@@ -40,6 +40,22 @@ const loadDaysFromServer = () => {
         ReactDOM.render(
             <DayList dates={data.dates} />, document.querySelector("#daysList")
         );
+        for(var x = 0; x < data.dates.length; x++){
+            if (!data.dates[x].fat){
+                var temp = document.getElementsByClassName(data.dates[x].name+'f')
+                console.log(temp);
+                for(var y = 0; y < temp.length; y++){
+                    temp[y].innerHTML='';
+                }
+            }
+            if (!data.dates[x].sugar){
+                var temp = document.getElementsByClassName(data.dates[x].name+'s')
+                console.log(temp);
+                for(var y = 0; y < temp.length; y++){
+                    temp[y].innerHTML='';
+                }
+            }  
+        }
     });
 };
 

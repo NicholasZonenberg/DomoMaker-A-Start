@@ -4,7 +4,7 @@ const handleDomo = (e) => {
     $("#domoMessage").animate({width:'hide'},350);
 
     if($('#domoName').val() == '' || $("#domoAge").val() == ''){
-        handleError("RAWR! All fields are required");
+        handleError("All fields are required");
         return false;
     }
 
@@ -41,7 +41,7 @@ const DomoForm = (props) => {
                 <input id="sugarCount" type="number" name="sugar" placeholder="amount of sugar" />
                 <input id="fatCount" type="number" name="fat" placeholder="amount of fat" />
                 <input type="hidden" name="_csrf" value={props.csrf} />
-                <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+                <input className="makeDomoSubmit" type="submit" value="Enter Meal" />
             </form>
             <button id="enablePremium" onClick={togglePremium}>Get Premium</button>
         </div>
@@ -52,7 +52,7 @@ const DomoList = function(props) {
     if(props.domos.length === 0) {
         return(
             <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet</h3>
+                <h3 className="emptyDomo">No Meals Yet</h3>
             </div>
         );
     }
@@ -62,9 +62,9 @@ const DomoList = function(props) {
             <div key={domo._id} className="domo">
                 <img src="/assets/img/meal.jpg" alt="domo face" className="domoFace" />
                 <h3 className="domoName"> Date: {domo.name} </h3>
-                <h3 className="domoAge"> Claroies: {domo.age} </h3>
-                <h3 className="domoAge"> Sugar: {domo.sugar} </h3>
-                <h3 className="domoAge"> Fat: {domo.fat} </h3>
+                <h3 className="domoAge"> Calories: {domo.age} </h3>
+                <h3 className={`sugar ${domo._id}s`}> Sugar: {domo.sugar} </h3>
+                <h3 className={`fat ${domo._id}f`}> Fat: {domo.fat} </h3>
             </div>
         );
     });
@@ -89,6 +89,21 @@ const loadDomosFromServer = () => {
         else {
             document.getElementById("sugarCount").disabled = false;
             document.getElementById("fatCount").disabled = false;
+        }
+        console.log(data.domos);
+        for(var x = 0; x < data.domos.length; x++){
+            if (!data.domos[x].fat){
+                var temp = document.getElementsByClassName(data.domos[x]._id.toString()+'f');
+                for(var y = 0; y < temp.length; y++){
+                    temp[y].innerHTML='';
+                }
+            }
+            if (!data.domos[x].sugar){
+                var temp = document.getElementsByClassName(data.domos[x]._id.toString()+'s');
+                for(var y = 0; y < temp.length; y++){
+                    temp[y].innerHTML='';
+                }
+            } 
         }
     });
 };

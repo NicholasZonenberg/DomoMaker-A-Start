@@ -238,7 +238,7 @@ h3.emptyDomo {
 
 h3.domoName {
     float:left;
-    width: 100px;
+    width: 200px;
     font-weight: bold;
     padding-left: 65px;
     font-size: 1em;
@@ -248,7 +248,56 @@ h3.domoName {
 h3.domoAge {
     float:right;
     text-align: left;
+    width: 120px;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
+}
+
+h3.dateCal {
+    float:right;
+    text-align: left;
     width: 200px;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
+}
+
+current {
+    background-color: rgba(128, 128, 128, 0.493);
+}
+
+h3.dateSugar {
+    float:right;
+    text-align: left;
+    width: 200px;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
+}
+
+h3.sateFat {
+    float:right;
+    text-align: left;
+    width: 200px;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
+}
+
+h3.sugar {
+    float:right;
+    text-align: left;
+    width: 120px;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
+}
+
+h3.fat {
+    float:right;
+    text-align: left;
+    width: 120px;
     font-weight: bold;
     font-size: 1em;
     font-family: 'Pridi', serif;
