@@ -523,6 +523,8 @@ var DomoForm = function DomoForm(props) {
             React.createElement('input', { id: 'domoAge', type: 'number', name: 'age', placeholder: 'Calorie Count' }),
             React.createElement('input', { id: 'sugarCount', type: 'number', name: 'sugar', placeholder: 'amount of sugar' }),
             React.createElement('input', { id: 'fatCount', type: 'number', name: 'fat', placeholder: 'amount of fat' }),
+            React.createElement('input', { type: 'hidden', name: 'exerciseType', value: '' }),
+            React.createElement('input', { type: 'hidden', name: 'exerciseTime', value: '0' }),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
             React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Enter Meal' })
         ),

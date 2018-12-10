@@ -40,6 +40,8 @@ const DomoForm = (props) => {
                 <input id="domoAge" type="number" name="age" placeholder="Calorie Count"/>
                 <input id="sugarCount" type="number" name="sugar" placeholder="amount of sugar" />
                 <input id="fatCount" type="number" name="fat" placeholder="amount of fat" />
+                <input type="hidden" name="exerciseType" value="" />
+                <input type="hidden" name="exerciseTime" value="0" />
                 <input type="hidden" name="_csrf" value={props.csrf} />
                 <input className="makeDomoSubmit" type="submit" value="Enter Meal" />
             </form>
