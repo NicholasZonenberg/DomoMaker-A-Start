@@ -28,6 +28,39 @@ const graphsPage = (req, res) => {
   });
 };
 
+const prem = (req, res) => {
+  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+
+    return res.render('premium', { csrfToken: req.csrfToken(), domos: docs });
+  });
+};
+
+const exercise = (req, res) => {
+  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+
+    return res.render('exercise', { csrfToken: req.csrfToken(), domos: docs });
+  });
+};
+
+const exGraph = (req, res) => {
+  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+
+    return res.render('exGraph', { csrfToken: req.csrfToken(), domos: docs });
+  });
+};
+
 const makerPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -52,6 +85,8 @@ const makeDomo = (req, res) => {
     sugar: req.body.sugar,
     fat: req.body.fat,
     owner: req.session.account._id,
+    exerciseTime: req.body.exerciseTime,
+    exerciseType: req.body.exerciseType,
   };
 
   const newDomo = new Domo.DomoModel(domoData);
@@ -155,3 +190,6 @@ module.exports.getDays = getDays;
 module.exports.make = makeDomo;
 module.exports.premium = setPremium;
 module.exports.getPremium = getPremium;
+module.exports.prem = prem;
+module.exports.exercise = exercise;
+module.exports.exGraph = exGraph;

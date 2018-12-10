@@ -33,6 +33,17 @@ const DomoSchema = new mongoose.Schema({
     required: false,
   },
 
+  exerciseType: {
+    type: String,
+    required: false,
+  },
+
+  exerciseTime: {
+    type: Number,
+    required: false,
+    min:0,
+  },
+
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
@@ -57,7 +68,7 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age fat sugar').exec(callback);
+  return DomoModel.find(search).select('name age fat sugar exercise').exec(callback);
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);
