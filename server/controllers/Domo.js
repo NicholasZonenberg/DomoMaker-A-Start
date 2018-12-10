@@ -6,10 +6,10 @@ let premium = false;
 
 const Domo = models.Domo;
 
-var biking = 11;
-var running = 9;
-var swimming = 7;
-var walking = 5;
+const biking = 11;
+const running = 9;
+const swimming = 7;
+const walking = 5;
 
 const daysPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -66,9 +66,7 @@ const exGraph = (req, res) => {
   });
 };
 
-const error = (req, res) => {
-  return res.render('error');
-}
+const error = (req, res) => res.render('error');
 
 const makerPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -177,16 +175,16 @@ const getDays = (request, response) => {
           if (docs[a].fat && premium) {
             dates[b].fat += docs[a].fat;
           }
-          if (docs[a].exerciseTime && premium && docs[a].exerciseType == 'walking') {
+          if (docs[a].exerciseTime && premium && docs[a].exerciseType === 'walking') {
             dates[b].caloriesBurn += docs[a].exerciseTime * walking;
           }
-          if (docs[a].exerciseTime && premium && docs[a].exerciseType == 'running') {
+          if (docs[a].exerciseTime && premium && docs[a].exerciseType === 'running') {
             dates[b].caloriesBurn += docs[a].exerciseTime * running;
           }
-          if (docs[a].exerciseTime && premium && docs[a].exerciseType == 'biking') {
+          if (docs[a].exerciseTime && premium && docs[a].exerciseType === 'biking') {
             dates[b].caloriesBurn += docs[a].exerciseTime * biking;
           }
-          if (docs[a].exerciseTime && premium && docs[a].exerciseType == 'swimming') {
+          if (docs[a].exerciseTime && premium && docs[a].exerciseType === 'swimming') {
             dates[b].caloriesBurn += docs[a].exerciseTime * swimming;
           }
         }
