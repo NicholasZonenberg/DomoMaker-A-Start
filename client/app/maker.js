@@ -45,7 +45,6 @@ const DomoForm = (props) => {
                 <input type="hidden" name="_csrf" value={props.csrf} />
                 <input className="makeDomoSubmit" type="submit" value="Enter Meal" />
             </form>
-            <button id="enablePremium" onClick={togglePremium}>Get Premium</button>
         </div>
     );
 };

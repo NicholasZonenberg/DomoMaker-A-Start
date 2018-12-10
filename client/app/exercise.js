@@ -48,7 +48,7 @@ const ExForm = (props) => {
                 </select>
                 <input id="exerciseTime" type="number" name="exerciseTime" placeholder="Exercise Duration" />
                 <input type="hidden" name="_csrf" value={props.csrf} />
-                <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+                <input className="makeDomoSubmit" type="submit" value="Enter Exercise" />
             </form>
             <button id="enablePremium" onClick={togglePremium}>Get Premium</button>
         </div>
@@ -59,7 +59,7 @@ const ExList = function(props) {
     if(props.domos.length === 0) {
         return(
             <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet</h3>
+                <h3 className="emptyDomo">No Exercises Yet</h3>
             </div>
         );
     }

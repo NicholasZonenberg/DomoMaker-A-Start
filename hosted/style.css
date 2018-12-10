@@ -195,7 +195,7 @@ nav:nth-child(1) {
     border: 2px solid #55acee;
     border-radius: 4px;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 10px;
 }
 
 .domo {
@@ -330,4 +330,13 @@ h3.fat {
     margin-bottom: 10px;
     font-size: 30px;
     font-family: 'Carter One', cursive;
+}
+
+#noPage{
+    width: 400px;
+    margin: auto;
+    background-color: lightblue;
+    border-radius: 10px;
+    height: 40px;
+    text-align: center;
 }

@@ -182,7 +182,7 @@ var ExForm = function ExForm(props) {
             ),
             React.createElement('input', { id: 'exerciseTime', type: 'number', name: 'exerciseTime', placeholder: 'Exercise Duration' }),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-            React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
+            React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Enter Exercise' })
         ),
         React.createElement(
             'button',
@@ -200,7 +200,7 @@ var ExList = function ExList(props) {
             React.createElement(
                 'h3',
                 { className: 'emptyDomo' },
-                'No Domos Yet'
+                'No Exercises Yet'
             )
         );
     }
@@ -527,11 +527,6 @@ var DomoForm = function DomoForm(props) {
             React.createElement('input', { type: 'hidden', name: 'exerciseTime', value: '0' }),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
             React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Enter Meal' })
-        ),
-        React.createElement(
-            'button',
-            { id: 'enablePremium', onClick: togglePremium },
-            'Get Premium'
         )
     );
 };

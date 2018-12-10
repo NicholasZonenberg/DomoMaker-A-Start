@@ -61,6 +61,10 @@ const exGraph = (req, res) => {
   });
 };
 
+const error = (req, res) => {
+  return res.render('error');
+}
+
 const makerPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -193,3 +197,4 @@ module.exports.getPremium = getPremium;
 module.exports.prem = prem;
 module.exports.exercise = exercise;
 module.exports.exGraph = exGraph;
+module.exports.error = error;
