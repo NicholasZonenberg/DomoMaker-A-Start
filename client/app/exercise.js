@@ -1,15 +1,15 @@
-const handleDomo = (e) => {
+const handleEx = (e) => {
     e.preventDefault();
 
     $("#domoMessage").animate({width:'hide'},350);
 
-    if($('#domoName').val() == '' || $("#domoAge").val() == ''){
-        handleError("RAWR! All fields are required");
+    if($('#domoName').val() == ''){
+        handleError("All fields are required");
         return false;
     }
 
-    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
-        loadDomosFromServer();
+    sendAjax('POST', $("#exForm").attr("action"), $("#exForm").serialize(), function() {
+        loadExDatFromServer();
     });
 
     return false;
@@ -35,7 +35,7 @@ const ExForm = (props) => {
     
     return (
         <div>
-            <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="/maker" method="POST" className="domoForm">
+            <form id="exForm" onSubmit={handleEx} name="domoForm" action="/maker" method="POST" className="domoForm">
                 <input id="domoName" type="date" name="name" placeholder="Date of meal"/>
                 <input id="domoAge" type="hidden" name="age" placeholder="Calorie Count"/>
                 <input id="sugarCount" type="hidden" name="sugar" placeholder="amount of sugar" />
@@ -48,14 +48,23 @@ const ExForm = (props) => {
                 </select>
                 <input id="exerciseTime" type="number" name="exerciseTime" placeholder="Exercise Duration" />
                 <input type="hidden" name="_csrf" value={props.csrf} />
-                <input className="makeDomoSubmit" type="submit" value="Enter Exercise" />
+                <input className="exSubmit" type="submit" value="Enter Exercise" />
             </form>
-            <button id="enablePremium" onClick={togglePremium}>Get Premium</button>
         </div>
     );
 };
 
+const Empt = function(){
+    return(
+        <div className="domoList">
+            <h3 className="emptyDomo">No Exercises Yet</h3>
+        </div>
+    );
+}
+
 const ExList = function(props) {
+    console.log('props');
+    console.log(props);
     if(props.domos.length === 0) {
         return(
             <div className="domoList">
@@ -64,38 +73,63 @@ const ExList = function(props) {
         );
     }
 
-    const domoNodes = props.domos.map(function(domo) {
+    const exNodes = props.domos.map(function(exDat) {
         return(
-            <div key={domo._id} className="domo">
+            <div key={exDat._id} className={`domo ${exDat._id}`} >
                 <img src="/assets/img/meal.jpg" alt="domo face" className="domoFace" />
-                <h3 className="domoName"> Date: {domo.name} </h3>
-                <h3 className="domoAge"> Claroies: {domo.age} </h3>
-                <h3 className="domoAge"> Sugar: {domo.sugar} </h3>
-                <h3 className="domoAge"> Fat: {domo.fat} </h3>
+                <h3 className="domoName"> Date: {exDat.name} </h3>
+                <h3 className="exType"> Exercise Type: {exDat.exerciseType} </h3>
+                <h3 className="domoAge"> Length: {exDat.exerciseTime} </h3>
             </div>
         );
     });
 
     return (
         <div className="domoList">
-            {domoNodes}
+            {exNodes}
         </div>
     );
 };
 
-const loadDomosFromServer = () => {
-    sendAjax('GET', '/getDomos', null, (data) => {
-        console.log
+const loadExDatFromServer = () => {
+    sendAjax('GET', '/getDomos', null, (exDat) => {
+        console.log('exDat:')
+        console.log(exDat);
         ReactDOM.render(
-            <DomoList domos={data.domos} />, document.querySelector("#domos")
+            <ExList domos={exDat.domos} />, document.querySelector("#exercise")
         );
+        console.log('render done');
         if(!premium){
-            document.getElementById("sugarCount").disabled = true;
-            document.getElementById("fatCount").disabled = true;
+            document.getElementById("domoName").disabled = true;
+            document.getElementById("exerciseType").disabled = true;
+            document.getElementById("exerciseTime").disabled = true;
         }
         else {
-            document.getElementById("sugarCount").disabled = false;
-            document.getElementById("fatCount").disabled = false;
+            document.getElementById("domoName").disabled = false;
+            document.getElementById("exerciseType").disabled = false;
+            document.getElementById("exerciseTime").disabled = false;
+        }
+
+        var anyEx = 0;
+        var anyTest = 0;
+
+        for(var x = 0; x < exDat.domos.length; x++){
+            console.log('x');
+            if(!exDat.domos[x].exerciseType){
+                var temp = document.getElementsByClassName(exDat.domos[x]._id.toString());
+                temp[0].innerHTML='';
+                temp[0].classList='';
+                anyEx++;
+            }
+            anyTest++;
+        }
+
+        console.log(anyEx + ' ' + anyTest);
+
+        if (anyEx === anyTest){
+            ReactDOM.render(
+                <Empt />, document.querySelector("#exercise")
+            );
         }
     });
 };
@@ -107,11 +141,8 @@ const exSetup = function(csrf) {
             <ExForm csrf={csrf} />, document.querySelector("#enterEx")
         );
 
-        ReactDOM.render(
-            <ExList domos={[]} />, document.querySelector("#exercise")
-        );
+        loadExDatFromServer();
 
-        //loadDomosFromServer();
     }
 };
 

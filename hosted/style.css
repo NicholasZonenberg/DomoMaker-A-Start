@@ -4,6 +4,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-image: url("assets/img/domo.png");
 }
 
 #logo {
@@ -15,9 +16,16 @@ html, body {
 }
 
 nav {
-    width: 100%;
+    padding-left: 10px;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    border-color: #646665;
+    border-width: 2px;
+    border-style: solid;
+    width: 800px;
     height: 50px;
-    background-color: #55acee;
+    background-color: rgba(186, 220, 213, 0.699);
 }
 
 nav:nth-child(1) {
@@ -38,7 +46,7 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: rgba(186, 220, 213, 0.699);
     transition: background-color 0.4s ease;
 }
 
@@ -48,14 +56,14 @@ nav:nth-child(1) {
 }
 
 .domoForm {
-    border: 2px solid #338acc;
+    border: 2px solid #14B896;
     height: 35px;
-    width: 1400px;
-    margin-top:0px;
+    width: 810px;
     padding-top:10px;
-    background-color: #55acee;
-    border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
+    margin: auto;
+    margin-top:10px;
+    background-color: rgba(186, 220, 213, 0.699);
+    border-radius: 5px;
 }
 
 .domoForm label {
@@ -75,7 +83,7 @@ nav:nth-child(1) {
     transition: background-color 0.4s ease;
     display: inline;
     width: 90px;
-    background-color: #55acee;
+    background-color: rgba(186, 220, 213, 0.699);
     border-radius: 2px;
     color: white;
     text-decoration: none;
@@ -87,7 +95,7 @@ nav:nth-child(1) {
 
 .makeDomoSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #14B896;
 }
 
 .mainForm {
@@ -118,7 +126,7 @@ nav:nth-child(1) {
     margin-top: 14px;
     font-size: 1.2em;
     width: 100px;
-    background-color: #55acee;
+    background-color: rgba(186, 220, 213, 0.699);
     border-radius: 2px;
     border-color: #66acee;
     padding: 3px 0px;
@@ -132,7 +140,7 @@ nav:nth-child(1) {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #14B896;
 }
 
 #user, #pass, #pass2 {
@@ -144,7 +152,7 @@ nav:nth-child(1) {
 
 #user:focus, #pass:focus, #pass2:focus {
     outline: none;
-    box-shadow: 0px 0px 1px 1px #55acee;
+    box-shadow: 0px 0px 1px 1px rgba(186, 220, 213, 0.699);
 }
 
 #domoMessage {
@@ -191,8 +199,8 @@ nav:nth-child(1) {
 
 #domos {
     width: 40%;
-    min-width: 400px;
-    border: 2px solid #55acee;
+    min-width: 700px;
+    border: 2px solid rgba(186, 220, 213, 0.699);
     border-radius: 4px;
     margin: 0 auto;
     margin-top: 10px;
@@ -203,9 +211,9 @@ nav:nth-child(1) {
     margin: 0 auto;
     margin-top: 2px;
     margin-bottom: 2px;
-    border: 2px solid #55acee;
+    border: 2px solid rgba(186, 220, 213, 0.699);
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: rgba(186, 220, 213, 0.699);
     padding: 10px;
     min-height:60px;
     overflow: hidden;
@@ -213,7 +221,7 @@ nav:nth-child(1) {
 
 .domo:hover {
     transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
+    border-color: rgba(255, 255, 255, 0);
     transition: background-color 2.6s ease-out;
     background-color: #66bfff;
 }
@@ -238,9 +246,9 @@ h3.emptyDomo {
 
 h3.domoName {
     float:left;
-    width: 200px;
+    width: 150px;
     font-weight: bold;
-    padding-left: 65px;
+    padding-left: 10px;
     font-size: 1em;
     font-family: 'Pridi', serif;
 }
@@ -316,13 +324,13 @@ h3.fat {
     width:750px;
     padding: 15px;
     border-radius: 20px;
-    background-color: lightgray;
+    background-color: rgba(211, 211, 211, 0.705);
 }
 
 #daysTitle{
     width:250px;
     margin:auto;
-    background-color: lightblue;
+    background-color: rgba(173, 216, 230, 0.795);
     height: 45px;
     border-radius: 10px;
     text-align: center;
@@ -340,3 +348,95 @@ h3.fat {
     height: 40px;
     text-align: center;
 }
+
+input{
+    margin-left:5px;
+    margin-right:5px;  
+}
+
+.date{
+    width:95%;
+}
+
+#daysList {
+    width: 40%;
+    min-width: 940px;
+    border: 2px solid rgba(186, 220, 213, 0.699);
+    border-radius: 4px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+#exercise {
+    width: 40%;
+    min-width: 700px;
+    border: 2px solid rgba(186, 220, 213, 0.699);
+    border-radius: 4px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.exSubmit {
+    transition: background-color 0.4s ease;
+    display: inline;
+    width: 120px;
+    background-color: rgba(186, 220, 213, 0.699);
+    border-radius: 2px;
+    color: white;
+    text-decoration: none;
+}
+
+#exForm {
+    border: 2px solid #14B896;
+    height: 35px;
+    width: 560px;
+    padding-top:10px;
+    margin: auto;
+    margin-top:10px;
+    background-color: rgba(186, 220, 213, 0.699);
+    border-radius: 5px;
+}
+
+.exForm label {
+    display: inline-block;
+    width: 75px;
+    margin-left: 10px;
+    font-size: 1.2em;
+    float: left;
+    color: white;
+}
+
+.exForm input[type=text] {
+    float:left;
+}
+
+#exGraphSec{
+    margin:auto;
+    width:750px;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: rgba(211, 211, 211, 0.705);
+}
+
+#exTitle{
+    width:150px;
+    margin:auto;
+    background-color: rgba(173, 216, 230, 0.795);
+    height: 45px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-family: 'Carter One', cursive;
+}
+
+h3.exType {
+    float:right;
+    text-align: left;
+    width: 300px;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Pridi', serif;
+}
+

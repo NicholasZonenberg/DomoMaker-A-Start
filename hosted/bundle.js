@@ -26,7 +26,7 @@ var DayList = function DayList(props) {
         console.log(dates);
         return React.createElement(
             "div",
-            { key: dates._id, className: "domo" },
+            { key: dates._id, className: "domo date " + dates.name + "date" },
             React.createElement("img", { src: "/assets/img/date.png", alt: "date", className: "domoFace" }),
             React.createElement(
                 "h3",
@@ -85,6 +85,11 @@ var loadDaysFromServer = function loadDaysFromServer() {
                     temp[y].innerHTML = '';
                 }
             }
+            if (data.dates[x].calories == 0) {
+                var temp = document.getElementsByClassName(data.dates[x].name + 'date');
+                temp[0].innerHTML = '';
+                temp[0].classList = 'empty';
+            }
         }
     });
 };
@@ -112,18 +117,18 @@ $(document).ready(function () {
 });
 'use strict';
 
-var handleDomo = function handleDomo(e) {
+var handleEx = function handleEx(e) {
     e.preventDefault();
 
     $("#domoMessage").animate({ width: 'hide' }, 350);
 
-    if ($('#domoName').val() == '' || $("#domoAge").val() == '') {
-        handleError("RAWR! All fields are required");
+    if ($('#domoName').val() == '') {
+        handleError("All fields are required");
         return false;
     }
 
-    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-        loadDomosFromServer();
+    sendAjax('POST', $("#exForm").attr("action"), $("#exForm").serialize(), function () {
+        loadExDatFromServer();
     });
 
     return false;
@@ -151,7 +156,7 @@ var ExForm = function ExForm(props) {
         null,
         React.createElement(
             'form',
-            { id: 'domoForm', onSubmit: handleDomo, name: 'domoForm', action: '/maker', method: 'POST', className: 'domoForm' },
+            { id: 'exForm', onSubmit: handleEx, name: 'domoForm', action: '/maker', method: 'POST', className: 'domoForm' },
             React.createElement('input', { id: 'domoName', type: 'date', name: 'name', placeholder: 'Date of meal' }),
             React.createElement('input', { id: 'domoAge', type: 'hidden', name: 'age', placeholder: 'Calorie Count' }),
             React.createElement('input', { id: 'sugarCount', type: 'hidden', name: 'sugar', placeholder: 'amount of sugar' }),
@@ -182,17 +187,26 @@ var ExForm = function ExForm(props) {
             ),
             React.createElement('input', { id: 'exerciseTime', type: 'number', name: 'exerciseTime', placeholder: 'Exercise Duration' }),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-            React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Enter Exercise' })
-        ),
+            React.createElement('input', { className: 'exSubmit', type: 'submit', value: 'Enter Exercise' })
+        )
+    );
+};
+
+var Empt = function Empt() {
+    return React.createElement(
+        'div',
+        { className: 'domoList' },
         React.createElement(
-            'button',
-            { id: 'enablePremium', onClick: togglePremium },
-            'Get Premium'
+            'h3',
+            { className: 'emptyDomo' },
+            'No Exercises Yet'
         )
     );
 };
 
 var ExList = function ExList(props) {
+    console.log('props');
+    console.log(props);
     if (props.domos.length === 0) {
         return React.createElement(
             'div',
@@ -205,37 +219,30 @@ var ExList = function ExList(props) {
         );
     }
 
-    var domoNodes = props.domos.map(function (domo) {
+    var exNodes = props.domos.map(function (exDat) {
         return React.createElement(
             'div',
-            { key: domo._id, className: 'domo' },
+            { key: exDat._id, className: 'domo ' + exDat._id },
             React.createElement('img', { src: '/assets/img/meal.jpg', alt: 'domo face', className: 'domoFace' }),
             React.createElement(
                 'h3',
                 { className: 'domoName' },
                 ' Date: ',
-                domo.name,
+                exDat.name,
+                ' '
+            ),
+            React.createElement(
+                'h3',
+                { className: 'exType' },
+                ' Exercise Type: ',
+                exDat.exerciseType,
                 ' '
             ),
             React.createElement(
                 'h3',
                 { className: 'domoAge' },
-                ' Claroies: ',
-                domo.age,
-                ' '
-            ),
-            React.createElement(
-                'h3',
-                { className: 'domoAge' },
-                ' Sugar: ',
-                domo.sugar,
-                ' '
-            ),
-            React.createElement(
-                'h3',
-                { className: 'domoAge' },
-                ' Fat: ',
-                domo.fat,
+                ' Length: ',
+                exDat.exerciseTime,
                 ' '
             )
         );
@@ -244,20 +251,44 @@ var ExList = function ExList(props) {
     return React.createElement(
         'div',
         { className: 'domoList' },
-        domoNodes
+        exNodes
     );
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-    sendAjax('GET', '/getDomos', null, function (data) {
-        console.log;
-        ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
+var loadExDatFromServer = function loadExDatFromServer() {
+    sendAjax('GET', '/getDomos', null, function (exDat) {
+        console.log('exDat:');
+        console.log(exDat);
+        ReactDOM.render(React.createElement(ExList, { domos: exDat.domos }), document.querySelector("#exercise"));
+        console.log('render done');
         if (!premium) {
-            document.getElementById("sugarCount").disabled = true;
-            document.getElementById("fatCount").disabled = true;
+            document.getElementById("domoName").disabled = true;
+            document.getElementById("exerciseType").disabled = true;
+            document.getElementById("exerciseTime").disabled = true;
         } else {
-            document.getElementById("sugarCount").disabled = false;
-            document.getElementById("fatCount").disabled = false;
+            document.getElementById("domoName").disabled = false;
+            document.getElementById("exerciseType").disabled = false;
+            document.getElementById("exerciseTime").disabled = false;
+        }
+
+        var anyEx = 0;
+        var anyTest = 0;
+
+        for (var x = 0; x < exDat.domos.length; x++) {
+            console.log('x');
+            if (!exDat.domos[x].exerciseType) {
+                var temp = document.getElementsByClassName(exDat.domos[x]._id.toString());
+                temp[0].innerHTML = '';
+                temp[0].classList = '';
+                anyEx++;
+            }
+            anyTest++;
+        }
+
+        console.log(anyEx + ' ' + anyTest);
+
+        if (anyEx === anyTest) {
+            ReactDOM.render(React.createElement(Empt, null), document.querySelector("#exercise"));
         }
     });
 };
@@ -267,9 +298,7 @@ var exSetup = function exSetup(csrf) {
     if (document.querySelector("#enterEx")) {
         ReactDOM.render(React.createElement(ExForm, { csrf: csrf }), document.querySelector("#enterEx"));
 
-        ReactDOM.render(React.createElement(ExList, { domos: [] }), document.querySelector("#exercise"));
-
-        //loadDomosFromServer();
+        loadExDatFromServer();
     }
 };
 
@@ -547,7 +576,7 @@ var DomoList = function DomoList(props) {
     var domoNodes = props.domos.map(function (domo) {
         return React.createElement(
             'div',
-            { key: domo._id, className: 'domo' },
+            { key: domo._id, className: 'domo ' + domo._id + 'meal' },
             React.createElement('img', { src: '/assets/img/meal.jpg', alt: 'domo face', className: 'domoFace' }),
             React.createElement(
                 'h3',
@@ -589,7 +618,6 @@ var DomoList = function DomoList(props) {
 
 var loadDomosFromServer = function loadDomosFromServer() {
     sendAjax('GET', '/getDomos', null, function (data) {
-        console.log;
         ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
         if (!premium) {
             document.getElementById("sugarCount").disabled = true;
@@ -611,6 +639,11 @@ var loadDomosFromServer = function loadDomosFromServer() {
                 for (var y = 0; y < temp.length; y++) {
                     temp[y].innerHTML = '';
                 }
+            }
+            if (data.domos[x].age == null) {
+                var temp = document.getElementsByClassName(data.domos[x]._id.toString() + 'meal');
+                temp[0].innerHTML = '';
+                temp[0].classList = '';
             }
         }
     });

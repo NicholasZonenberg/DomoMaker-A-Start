@@ -77,7 +77,7 @@ const makerPage = (req, res) => {
 };
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
+  if (!req.body.name) {
     return res.status(400).json({ error: 'Both date and calories are required' });
   }
 

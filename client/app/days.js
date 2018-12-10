@@ -17,8 +17,8 @@ const DayList = function(props) {
     const domoNodes = props.dates.map(function(dates) {
         console.log(dates);
         return(
-            <div key={dates._id} className="domo">
-                <img src="/assets/img/date.png" alt="date" className="domoFace" />
+            <div key={dates._id} className={`domo date ${dates.name}date`}>
+                <img src="/assets/img/date.png" alt="date" className='domoFace'  />
                 <h3 className="domoName"> Date: {dates.name} </h3>
                 <h3 className="dateCal"> Calories Total: {dates.calories} </h3>
                 <h3 className={`dateSugar ${dates.name}s`}> Sugar Total: {dates.sugar} </h3>
@@ -55,6 +55,11 @@ const loadDaysFromServer = () => {
                     temp[y].innerHTML='';
                 }
             }  
+            if (data.dates[x].calories == 0){
+                var temp = document.getElementsByClassName(data.dates[x].name+'date');
+                temp[0].innerHTML='';
+                temp[0].classList='empty';
+            }
         }
     });
 };

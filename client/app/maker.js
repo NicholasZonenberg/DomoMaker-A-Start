@@ -60,8 +60,8 @@ const DomoList = function(props) {
 
     const domoNodes = props.domos.map(function(domo) {
         return(
-            <div key={domo._id} className="domo">
-                <img src="/assets/img/meal.jpg" alt="domo face" className="domoFace" />
+            <div key={domo._id} className={`domo ${domo._id}meal`}>
+                <img src="/assets/img/meal.jpg" alt="domo face" className='domoFace'  />
                 <h3 className="domoName"> Date: {domo.name} </h3>
                 <h3 className="domoAge"> Calories: {domo.age} </h3>
                 <h3 className={`sugar ${domo._id}s`}> Sugar: {domo.sugar} </h3>
@@ -79,7 +79,6 @@ const DomoList = function(props) {
 
 const loadDomosFromServer = () => {
     sendAjax('GET', '/getDomos', null, (data) => {
-        console.log
         ReactDOM.render(
             <DomoList domos={data.domos} />, document.querySelector("#domos")
         );
@@ -105,6 +104,11 @@ const loadDomosFromServer = () => {
                     temp[y].innerHTML='';
                 }
             } 
+            if(data.domos[x].age == null){
+                var temp = document.getElementsByClassName(data.domos[x]._id.toString()+'meal');
+                temp[0].innerHTML='';
+                temp[0].classList='';
+            }
         }
     });
 };
