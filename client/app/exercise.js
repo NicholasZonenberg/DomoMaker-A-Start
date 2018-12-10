@@ -20,10 +20,10 @@ var premium = false;
 const ExForm = (props) => {
     function togglePremium(e){
         console.log("toggeling premium");
-        sendAjax('GET', '/premium', null, (data) => {
+        sendAjax('GET', '/getPremium', null, (data) => {
             premium=data.premium;
         })
-        if(premium){
+        if(!premium){
             document.getElementById("sugarCount").disabled = true;
             document.getElementById("fatCount").disabled = true;
         }

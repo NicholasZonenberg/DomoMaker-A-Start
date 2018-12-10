@@ -2,7 +2,7 @@ const models = require('../models');
 const _ = require('lodash');
 const Moment = require('moment');
 
-let premium = true;
+let premium = false;
 
 const Domo = models.Domo;
 

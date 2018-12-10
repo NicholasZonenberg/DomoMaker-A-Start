@@ -139,10 +139,10 @@ var premium = false;
 var ExForm = function ExForm(props) {
     function togglePremium(e) {
         console.log("toggeling premium");
-        sendAjax('GET', '/premium', null, function (data) {
+        sendAjax('GET', '/getPremium', null, function (data) {
             premium = data.premium;
         });
-        if (premium) {
+        if (!premium) {
             document.getElementById("sugarCount").disabled = true;
             document.getElementById("fatCount").disabled = true;
         } else {
@@ -498,10 +498,10 @@ var premium = false;
 var DomoForm = function DomoForm(props) {
     function togglePremium(e) {
         console.log("toggeling premium");
-        sendAjax('GET', '/premium', null, function (data) {
+        sendAjax('GET', '/getPremium', null, function (data) {
             premium = data.premium;
         });
-        if (premium) {
+        if (!premium) {
             document.getElementById("sugarCount").disabled = true;
             document.getElementById("fatCount").disabled = true;
         } else {
@@ -651,26 +651,120 @@ var PremTitle = function PremTitle() {
     );
 };
 
-var PremForm = function PremForm() {
+var handlePrem = function handlePrem(e) {
+    e.preventDefault();
+
+    $("#domoMessage").animate({ width: 'hide' }, 350);
+
+    if (($('#name').val() == '' || $("#cardNumber").val() == '' || $("#secNumber").val() == '' || $("#expDate").val() == '' || $("#bName").val() == '' || $("#email").val() == '' || $("#address").val() == '' || $("#city").val() == '' || $("#state").val() == '' || $("#zip").val() == '') && !premium) {
+        handleError("All fields are required");
+        return false;
+    }
+
+    sendAjax('GET', '/premium', null, function (data) {
+        sendAjax('GET', '/getPremium', null, function (data) {
+            premium = data.premium;
+            if (premium) {
+                document.getElementById("name").disabled = true;
+                document.getElementById("cardNumber").disabled = true;
+                document.getElementById("secNumber").disabled = true;
+                document.getElementById("expDate").disabled = true;
+                document.getElementById("bName").disabled = true;
+                document.getElementById("email").disabled = true;
+                document.getElementById("address").disabled = true;
+                document.getElementById("city").disabled = true;
+                document.getElementById("state").disabled = true;
+                document.getElementById("zip").disabled = true;
+                document.getElementById("prembutton").value = 'Remove Premium';
+            } else {
+                document.getElementById("name").disabled = false;
+                document.getElementById("cardNumber").disabled = false;
+                document.getElementById("secNumber").disabled = false;
+                document.getElementById("expDate").disabled = false;
+                document.getElementById("bName").disabled = false;
+                document.getElementById("email").disabled = false;
+                document.getElementById("address").disabled = false;
+                document.getElementById("city").disabled = false;
+                document.getElementById("state").disabled = false;
+                document.getElementById("zip").disabled = false;
+                document.getElementById("prembutton").value = 'Get Premium';
+            }
+        });
+    });
+
+    return false;
+};
+
+var premium = false;
+
+var PremForm = function PremForm(props) {
     return React.createElement(
         "div",
         { id: "premDiv" },
         React.createElement(
+            "h3",
+            { className: "premTitle" },
+            " Card Info "
+        ),
+        React.createElement(
             "form",
-            null,
-            React.createElement("input", { id: "name", name: "name", placeholder: "Name on Card" }),
-            React.createElement("input", { id: "cardNumber", type: "number", name: "cNum", placeholder: "xxxx-xxxx-xxxx-xxxx" }),
-            React.createElement("input", { id: "secNumber", type: "number", name: "sNum", placeholder: "xxx" })
+            { id: "premForm", onSubmit: handlePrem, name: "premForm", action: "/premium", method: "POST" },
+            React.createElement("input", { id: "name", name: "name", placeholder: "Name on Card", className: "premIn" }),
+            React.createElement("input", { id: "cardNumber", type: "number", name: "cNum", placeholder: "xxxx-xxxx-xxxx-xxxx", className: "premIn" }),
+            React.createElement("input", { id: "secNumber", type: "number", name: "sNum", placeholder: "xxx", className: "premIn" }),
+            React.createElement("input", { id: "expDate", type: "date", name: "expDate" }),
+            React.createElement(
+                "h3",
+                { className: "premTitle" },
+                " Billing Info "
+            ),
+            React.createElement("input", { id: "bName", name: "bName", placeholder: "Jhon Doe", className: "premIn" }),
+            React.createElement("input", { id: "email", name: "email", placeholder: "jhon@example.com", className: "premIn" }),
+            React.createElement("input", { id: "address", name: "adress", placeholder: "5 Street Street", className: "premIn" }),
+            React.createElement("input", { id: "city", name: "city", placeholder: "City", className: "premIn" }),
+            React.createElement("input", { id: "state", name: "state", placeholder: "NY", className: "premIn" }),
+            React.createElement("input", { id: "zip", name: "zip", placeholder: "xxxxx", className: "premIn" }),
+            React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
+            React.createElement("input", { id: "prembutton", className: "makeDomoSubmit", type: "submit", value: "Get Premium" })
         )
     );
 };
 
 var premSetup = function premSetup(csrf) {
-    console.log('loading graph data');
 
     if (document.querySelector("#premTitle")) {
         ReactDOM.render(React.createElement(PremTitle, null), document.querySelector("#premTitle"));
-        ReactDOM.render(React.createElement(PremForm, null), document.querySelector("#premForm"));
+        ReactDOM.render(React.createElement(PremForm, { csrf: csrf }), document.querySelector("#premForm"));
+    }
+
+    sendAjax('GET', '/getPremium', null, function (data) {
+        premium = data.premium;
+    });
+
+    if (premium) {
+        document.getElementById("name").disabled = true;
+        document.getElementById("cardNumber").disabled = true;
+        document.getElementById("secNumber").disabled = true;
+        document.getElementById("expDate").disabled = true;
+        document.getElementById("bName").disabled = true;
+        document.getElementById("email").disabled = true;
+        document.getElementById("address").disabled = true;
+        document.getElementById("city").disabled = true;
+        document.getElementById("state").disabled = true;
+        document.getElementById("zip").disabled = true;
+        document.getElementById("prembutton").value = 'Remove Premium';
+    } else {
+        document.getElementById("name").disabled = false;
+        document.getElementById("cardNumber").disabled = false;
+        document.getElementById("secNumber").disabled = false;
+        document.getElementById("expDate").disabled = false;
+        document.getElementById("bName").disabled = false;
+        document.getElementById("email").disabled = false;
+        document.getElementById("address").disabled = false;
+        document.getElementById("city").disabled = false;
+        document.getElementById("state").disabled = false;
+        document.getElementById("zip").disabled = false;
+        document.getElementById("prembutton").value = 'Get Premium';
     }
 };
 
