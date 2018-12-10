@@ -4,47 +4,6 @@ const GraphTitle = () => {
     )
 }
 
-const Graph = function() {
-    console.log('making graphs');
-
-    console.log(dates);
-    var calData={
-        x:[],
-        y:[],
-        name:'Calories'
-    };
-
-    var fatData={
-        x:[],
-        y:[],
-        name:'Grams of Fat'
-    }
-
-    var sugarData={
-        x:[],
-        y:[],
-        name:'Grams of Sugar'
-    }
-
-    for(var x = 0; x < dates.length; x++){
-        sugarData.x.push(dates[x].name);
-        calData.x.push(dates[x].name);
-        fatData.x.push(dates[x].name);
-
-        calData.y.push(dates[x].calories);
-        sugarData.y.push(dates[x].sugar);
-        fatData.y.push(dates[x].fat);
-    }
-
-    return(
-        <div>
-            <Plot data={calData} layout={{width: 750, height: 300, title: 'Daily Calorie Graph'}} />
-            <Plot data={fatData} layout={{width: 750, height: 300, title: 'Daily Fat Graph'}} />
-            <Plot data={sugarData} layout={{width: 750, height: 300, title: 'Daily Sugar Graph'}} />
-        </div>
-    );
-};
-
 var dates;
 
 const loadGraphFromServer = () => {

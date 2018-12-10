@@ -21,18 +21,27 @@ const loadExGraphFromServer = () => {
             name:'Calories Burned',
             type:'bar'
         };
+        var calories={
+            x:[],
+            y:[],
+            name:'Calories',
+            type:'bar'
+        };
 
-        var calLay = {width: 750, height: 300, title: 'Daily Calories Burned Graph'};
+        var calLay = {width: 750, height: 300, title: 'Daily Calories Burned Graph', barmode:'group'};
 
         for(var x = 0; x < dates.length; x++){
             exData.x.push(dates[x].name);
+            calories.x.push(dates[x].name);
 
-            exData.y.push(dates[x].calories);
+            calories.y.push(dates[x].calories);
+            exData.y.push(dates[x].caloriesBurn);
         }
 
         console.log(exData);
+        console.log(calories);
 
-        Plotly.plot('exGraph',[exData],calLay);
+        Plotly.plot('exGraph',[exData,calories],calLay);
     });
 };
 

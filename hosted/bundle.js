@@ -342,18 +342,27 @@ var loadExGraphFromServer = function loadExGraphFromServer() {
             name: 'Calories Burned',
             type: 'bar'
         };
+        var calories = {
+            x: [],
+            y: [],
+            name: 'Calories',
+            type: 'bar'
+        };
 
-        var calLay = { width: 750, height: 300, title: 'Daily Calories Burned Graph' };
+        var calLay = { width: 750, height: 300, title: 'Daily Calories Burned Graph', barmode: 'group' };
 
         for (var x = 0; x < dates.length; x++) {
             exData.x.push(dates[x].name);
+            calories.x.push(dates[x].name);
 
-            exData.y.push(dates[x].calories);
+            calories.y.push(dates[x].calories);
+            exData.y.push(dates[x].caloriesBurn);
         }
 
         console.log(exData);
+        console.log(calories);
 
-        Plotly.plot('exGraph', [exData], calLay);
+        Plotly.plot('exGraph', [exData, calories], calLay);
     });
 };
 
@@ -386,47 +395,6 @@ var GraphTitle = function GraphTitle() {
         'h1',
         { id: 'daysTitle' },
         ' Graphs '
-    );
-};
-
-var Graph = function Graph() {
-    console.log('making graphs');
-
-    console.log(dates);
-    var calData = {
-        x: [],
-        y: [],
-        name: 'Calories'
-    };
-
-    var fatData = {
-        x: [],
-        y: [],
-        name: 'Grams of Fat'
-    };
-
-    var sugarData = {
-        x: [],
-        y: [],
-        name: 'Grams of Sugar'
-    };
-
-    for (var x = 0; x < dates.length; x++) {
-        sugarData.x.push(dates[x].name);
-        calData.x.push(dates[x].name);
-        fatData.x.push(dates[x].name);
-
-        calData.y.push(dates[x].calories);
-        sugarData.y.push(dates[x].sugar);
-        fatData.y.push(dates[x].fat);
-    }
-
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(Plot, { data: calData, layout: { width: 750, height: 300, title: 'Daily Calorie Graph' } }),
-        React.createElement(Plot, { data: fatData, layout: { width: 750, height: 300, title: 'Daily Fat Graph' } }),
-        React.createElement(Plot, { data: sugarData, layout: { width: 750, height: 300, title: 'Daily Sugar Graph' } })
     );
 };
 
